@@ -1,6 +1,7 @@
 #include <iostream>
 #include "methods.cpp"
 
+
 int main(){
     FILE *file = fopen("price.txt", "r");
     if (file == NULL){
@@ -8,17 +9,18 @@ int main(){
         return -1;
     }
     char line[256];
-    money total = {0, 0};
+    int totalGrn = 0, totalKop = 0;
     while (fgets(line, sizeof(line), file)) {
-        int quantity;
-        money a = cina(line, quantity);
-        std::cout << "Гривні: " << a.grn << ", Копійки: " << a.kop << ", Кількість: " << quantity << std::endl;
-        a = a * quantity;
-        total = total + a;
+        int quantity, grn, kop;
+        cina(line, quantity, grn, kop);
+        std::cout << "Гривні: " << grn << ", Копійки: " << kop << ", Кількість: " << quantity << std::endl;
+        int aGrn, aKop;
+        multiply(grn, kop, quantity, aGrn, aKop);
+        addiction(totalGrn, totalKop, aGrn, aKop, totalGrn, totalKop);
     }
-    print(total);
-    round(total);
-    print(total);
+    print(totalGrn, totalKop);
+    round(totalGrn, totalKop);
+    print(totalGrn, totalKop);
     fclose(file);
     return 0;
 }

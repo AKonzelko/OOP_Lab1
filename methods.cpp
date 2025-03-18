@@ -3,54 +3,53 @@
 #include <regex>
 #include <cstring>
 
-money cina(const char* line, int &quantity) {
+int cina(const char *line, int &quantity, int &grn, int &kop) {
     std::regex pattern(R"((\d+)\s*грн[,.\s]*(\d+)\s*коп[,.\s]*(\d+)\s*шт)");
     std::cmatch match;
-    money result = {0, 0};
     quantity = 1;
 
     if (std::regex_search(line, match, pattern)) {
-        result.grn = std::stoi(match[1]);
-        result.kop = static_cast<short int>(std::stoi(match[2]));
+        grn = std::stoi(match[1]);
+        kop = std::stoi(match[2]);
         quantity = std::stoi(match[3]);
     }
 
-    return result;
+    return 0;
 }
 
-money operator+(const money& obj1, const money& obj2){
-    money result;
-    result.grn = obj1.grn + obj2.grn;
-    result.kop = obj1.kop + obj2.kop;
+int addiction(int grn1, int kop1, int grn2, int kop2, int &resultGrn, int &resultKop) {
+    resultGrn = grn1 + grn2;
+    resultKop = kop1 + kop2;
 
-    if(result.kop >= 100){
-        result.grn++;
-        result.kop -= 100;
+    if (resultKop >= 100) {
+        resultGrn++;
+        resultKop -= 100;
     }
-    return result;
+
+    return 0;
 }
 
-money operator*(const money& obj, int num){
-    money result;
-    result.grn = obj.grn * num;
-    result.kop = obj.kop * num;
+int multiply(int grn, int kop, int num, int &resultGrn, int &resultKop) {
+    resultGrn = grn * num;
+    resultKop = kop * num;
 
-    if(result.kop >= 100){
-        result.grn += result.kop / 100;
-        result.kop %= 100;
+    if (resultKop >= 100) {
+        resultGrn += resultKop / 100;
+        resultKop %= 100;
     }
-    return result;
+
+    return 0;
 }
 
-void round(money &obj) {
-    if (obj.kop >= 95) {
-        obj.grn++;
-        obj.kop = 0;
+void round(int &grn, int &kop) {
+    if (kop >= 95) {
+        grn++;
+        kop = 0;
     } else {
-        obj.kop = ((obj.kop + 5) / 10) * 10;
+        kop = ((kop + 5) / 10) * 10;
     }
 }
 
-void print(const money &total) {
-    std::cout << "Загальна вартість товарів: Гривні: " << total.grn << ", Копійки: " << total.kop << std::endl;
+void print(const int &totalGrn, const int &totalKop) {
+    std::cout << "Загальна вартість товарів: Гривні: " << totalGrn << ", Копійки: " << totalKop << std::endl;
 }

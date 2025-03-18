@@ -5,12 +5,12 @@ struct money{
     short int kop;
 };
 
-money cina(const char* line, int &quantity);
+int cina(const char* line, int &quantity, int &grn, int &kop);
 
-money operator+(const money& obj1, const money& obj2);
+int addition(int grn1, int kop1, int grn2, int kop2, int &resultGrn, int &resultKop);
 
-money operator*(const money& obj, int num);
+int multiply(int grn, int kop, int num, int &resultGrn, int &resultKop);
 
 void round(money &obj);
 
-void print(const money &total);
+void print(const int &totalGrn, const int &totalKop);
