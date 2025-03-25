@@ -1,55 +1,51 @@
 #include "header.h"
-#include <cstdio>
+#include <iostream>
 #include <regex>
 #include <cstring>
 
-int cina(const char *line, int &quantity, int &grn, int &kop) {
+void cina(const char *line, money &obj, int &quantity) {
     std::regex pattern(R"((\d+)\s*грн[,.\s]*(\d+)\s*коп[,.\s]*(\d+)\s*шт)");
     std::cmatch match;
     quantity = 1;
 
     if (std::regex_search(line, match, pattern)) {
-        grn = std::stoi(match[1]);
-        kop = std::stoi(match[2]);
+        obj.grn = std::stoi(match[1]);
+        obj.kop = std::stoi(match[2]);
         quantity = std::stoi(match[3]);
     }
-
-    return 0;
 }
 
-int addiction(int grn1, int kop1, int grn2, int kop2, int &resultGrn, int &resultKop) {
-    resultGrn = grn1 + grn2;
-    resultKop = kop1 + kop2;
+void addition(money &total, const money &obj) {
+    total.grn += obj.grn;
+    total.kop += obj.kop;
 
-    if (resultKop >= 100) {
-        resultGrn++;
-        resultKop -= 100;
+    if (total.kop >= 100) {
+        total.grn += total.kop / 100;
+        total.kop %= 100;
     }
-
-    return 0;
 }
 
-int multiply(int grn, int kop, int num, int &resultGrn, int &resultKop) {
-    resultGrn = grn * num;
-    resultKop = kop * num;
+void multiply(money &obj, int num) {
+    obj.grn *= num;
+    obj.kop *= num;
 
-    if (resultKop >= 100) {
-        resultGrn += resultKop / 100;
-        resultKop %= 100;
+    if (obj.kop >= 100) {
+        obj.grn += obj.kop / 100;
+        obj.kop %= 100;
     }
-
-    return 0;
 }
 
-void round(int &grn, int &kop) {
-    if (kop >= 95) {
-        grn++;
-        kop = 0;
+void round(money &obj) {
+    if (obj.kop >= 95) {
+        obj.grn++;
+        obj.kop = 0;
     } else {
-        kop = ((kop + 5) / 10) * 10;
+        obj.kop = ((obj.kop + 5) / 10) * 10;
     }
 }
 
-void print(const int &totalGrn, const int &totalKop) {
-    std::cout << "Загальна вартість товарів: Гривні: " << totalGrn << ", Копійки: " << totalKop << std::endl;
+void print(const money &obj) {
+    std::cout << "Загальна вартість товарів: Гривні: " << obj.grn << ", Копійки: " << obj.kop << std::endl;
 }
+
+

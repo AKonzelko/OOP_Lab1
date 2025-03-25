@@ -1,26 +1,28 @@
 #include <iostream>
 #include "methods.cpp"
+#include <cstdio>
 
+using namespace std;
 
-int main(){
+int main() {
     FILE *file = fopen("price.txt", "r");
-    if (file == NULL){
+    if (file == NULL) {
         perror("Error opening file");
         return -1;
     }
     char line[256];
-    int totalGrn = 0, totalKop = 0;
+    money total = {0, 0};
     while (fgets(line, sizeof(line), file)) {
-        int quantity, grn, kop;
-        cina(line, quantity, grn, kop);
-        std::cout << "Гривні: " << grn << ", Копійки: " << kop << ", Кількість: " << quantity << std::endl;
-        int aGrn, aKop;
-        multiply(grn, kop, quantity, aGrn, aKop);
-        addiction(totalGrn, totalKop, aGrn, aKop, totalGrn, totalKop);
+        int quantity;
+        money obj = {0, 0};
+        cina(line, obj, quantity);
+        cout << "Гривні: " << obj.grn << ", Копійки: " << obj.kop << ", Кількість: " << quantity << endl;
+        multiply(obj, quantity);
+        addition(total, obj);
     }
-    print(totalGrn, totalKop);
-    round(totalGrn, totalKop);
-    print(totalGrn, totalKop);
+    print(total);
+    round(total);
+    print(total);
     fclose(file);
     return 0;
 }
